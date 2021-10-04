@@ -72,6 +72,7 @@ import { WebDIDProvider } from '@veramo/did-provider-web'
 
 // Core key manager plugin
 import { KeyManager } from '@veramo/key-manager'
+import { MemoryPrivateKeyStore } from '@veramo/key-manager/'
 
 // Custom key management system for RN
 import { KeyManagementSystem } from '@veramo/kms-local'
@@ -119,7 +120,7 @@ export const agent = createAgent<IDIDManager & IKeyManager & IDataStore & IDataS
     new KeyManager({
       store: new KeyStore(dbConnection),
       kms: {
-        local: new KeyManagementSystem(),
+        local: new KeyManagementSystem(new MemoryPrivateKeyStore()),
       },
     }),
     new DIDManager({
@@ -138,8 +139,8 @@ export const agent = createAgent<IDIDManager & IKeyManager & IDataStore & IDataS
     }),
     new DIDResolverPlugin({
       resolver: new Resolver({
-        ...ethrDidResolver({ infuraProjectId: INFURA_PROJECT_ID })
-        ...webDidResolver(),
+        ...ethrDidResolver({ infuraProjectId: INFURA_PROJECT_ID }),
+        ...webDidResolver()
       }),
     }),
   ],
